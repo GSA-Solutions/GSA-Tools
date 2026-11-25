@@ -10,7 +10,7 @@
 <style>
 :root{
   --bg:#11161b; --panel:#181f26; --line:#2a343d; --text:#e8edf2; --dim:#93a1ad;
-  --copper:#c8915a; --blue:#5da9e9; --green:#62c48a; --yellow:#e8c93a;
+  --copper:#c8915a; --blue:#5da9e9; --green:#62c48a; --yellow:#e8c93a; --violet:#b69bf0;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -26,7 +26,7 @@ header img{width:64px;height:64px;border-radius:14px;flex:none}
 h1{margin:0;font-size:clamp(2rem,6vw,3.2rem);line-height:1;font-weight:800;letter-spacing:-.02em}
 .sub{margin:6px 0 0;color:var(--dim)}
 
-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+nav{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
 .card{
   --c:var(--copper);
   display:grid;grid-template-rows:16px 1fr;
@@ -39,9 +39,10 @@ nav{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .card.copper{--c:var(--copper)}
 .card.blue{--c:var(--blue)}
 .card.tierra{--c:var(--green)}
+.card.violet{--c:var(--violet)}
 .band{background:var(--c)}
 .tierra .band{background:repeating-linear-gradient(90deg,var(--green) 0 26px,var(--yellow) 26px 52px)}
-.body{padding:22px 22px 24px;display:flex;flex-direction:column;gap:10px;min-height:250px}
+.body{padding:22px 22px 24px;display:flex;flex-direction:column;gap:10px;min-height:230px}
 h2{margin:0;font-size:1.55rem;line-height:1.15;font-weight:750;letter-spacing:-.01em}
 .desc{margin:0;color:var(--dim);font-size:.98rem;flex:1}
 .note{margin:0;color:var(--dim);font-size:.85rem}
@@ -97,6 +98,16 @@ h2{margin:0;font-size:1.55rem;line-height:1.15;font-weight:750;letter-spacing:-.
         <h2>GSA Solutions</h2>
         <p class="desc">Sitio de la empresa: electricidad, redes e infraestructura para hogares y empresas en Córdoba.</p>
         <p class="note">Página para clientes.</p>
+        <span class="open">Abrir</span>
+      </span>
+    </a>
+
+    <a class="card violet" href="perfil-elevacion/">
+      <span class="band" aria-hidden="true"></span>
+      <span class="body">
+        <h2>Perfil de elevación</h2>
+        <p class="desc">Poné dos puntos y mirá cómo sube y baja el terreno entre ellos. Con la altura de las antenas, ves si hay vista libre.</p>
+        <p class="note">Necesita internet.</p>
         <span class="open">Abrir</span>
       </span>
     </a>
