@@ -88,6 +88,16 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
 .antgrid label{display:block;color:var(--dim);font-size:.85rem}
 .antgrid input{margin-top:6px;background:var(--bg)}
 .antnote{margin:0 0 12px;color:var(--dim);font-size:.82rem}
+.bases{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.bases button{
+  font:inherit;font-size:.82rem;line-height:1.2;padding:7px 10px;border-radius:999px;cursor:pointer;
+  background:var(--bg);color:var(--text);border:1.5px solid var(--line);
+}
+.bases button:hover{border-color:var(--blue)}
+.bases button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#10151a;font-weight:700}
+.bases button span{color:var(--dim);margin-left:4px}
+.bases button[aria-pressed="true"] span{color:#10151a}
+@media (max-width:520px){.antgrid{grid-template-columns:1fr}}
 .los{border-radius:10px;padding:12px 14px;margin:0 0 14px;border:1.5px solid var(--line)}
 .los.ok{border-color:var(--green);background:rgba(98,196,138,.10)}
 .los.bad{border-color:var(--err);background:rgba(255,155,155,.10)}
@@ -119,10 +129,18 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     <details class="ant" id="ant">
       <summary>Altura de las antenas (opcional)</summary>
       <div class="antgrid">
-        <label>Altura en A (m)<input type="text" inputmode="decimal" id="hA" placeholder="Ej: 15" autocomplete="off"></label>
-        <label>Altura en B (m)<input type="text" inputmode="decimal" id="hB" placeholder="Ej: 20" autocomplete="off"></label>
+        <div>
+          <label for="hA">Altura en A (m)</label>
+          <input type="text" inputmode="decimal" id="hA" placeholder="Ej: 15" autocomplete="off">
+          <div class="bases" id="bA" role="group" aria-label="Bases para A"></div>
+        </div>
+        <div>
+          <label for="hB">Altura en B (m)</label>
+          <input type="text" inputmode="decimal" id="hB" placeholder="Ej: 20" autocomplete="off">
+          <div class="bases" id="bB" role="group" aria-label="Bases para B"></div>
+        </div>
       </div>
-      <p class="antnote">Metros sobre el suelo. Si completás solo una, la otra cuenta como 0 m. Si las dejás vacías, ves solo el perfil.</p>
+      <p class="antnote">Metros sobre el suelo. Tocá una base para cargar su altura, o escribí otra. Si completás solo una, la otra cuenta como 0 m. Si las dejás vacías, ves solo el perfil.</p>
     </details>
     <div class="actions">
       <button class="btn" type="button" id="go">Calcular perfil</button>
@@ -689,6 +707,8 @@ function invertir(){
   var tha = $('hA').value;
   $('hA').value = $('hB').value;
   $('hB').value = tha;
+  markBases('A');
+  markBases('B');
   state.A = state.B;
   state.B = a;
   $('cA').innerHTML = '';
@@ -717,6 +737,37 @@ $('csv').addEventListener('click', descargarCSV);
 });
 Array.prototype.forEach.call(document.querySelectorAll('[data-loc]'), function(b){
   b.addEventListener('click', function(){ miUbicacion(b.getAttribute('data-loc')); });
+});
+/* Bases de GSA con la altura de su torre o mástil (m sobre el suelo) */
+var BASES = [
+  { name: 'Alto Villa Sol', h: 53 },
+  { name: 'Torre Ángela', h: 110 },
+  { name: 'Sabattini', h: 25 },
+  { name: 'Telecor', h: 100 },
+  { name: 'IJCV', h: 25 }
+];
+function markBases(w){
+  var cur = parseFloat($('h' + w).value.replace(',', '.'));
+  Array.prototype.forEach.call($('b' + w).children, function(b){
+    b.setAttribute('aria-pressed', String(isFinite(cur) && cur === Number(b.getAttribute('data-h'))));
+  });
+}
+['A', 'B'].forEach(function(w){
+  var box = $('b' + w);
+  BASES.forEach(function(x){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('data-h', x.h);
+    b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = x.name + '<span>' + x.h + ' m</span>';
+    b.addEventListener('click', function(){
+      $('h' + w).value = String(x.h);
+      markBases(w);
+      refreshLos();
+    });
+    box.appendChild(b);
+  });
+  $('h' + w).addEventListener('input', function(){ markBases(w); });
 });
 ['hA', 'hB'].forEach(function(id){ $(id).addEventListener('input', refreshLos); });
 var cv = $('chart');
