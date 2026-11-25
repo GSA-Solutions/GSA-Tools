@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mis proyectos</title>
+<title>GSA Tools</title>
 <meta name="theme-color" content="#11161b">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
 :root{
   --bg:#11161b; --panel:#181f26; --line:#2a343d; --text:#e8edf2; --dim:#93a1ad;
-  --copper:#c8915a; --blue:#5da9e9; --green:#62c48a; --yellow:#e8c93a; --violet:#b69bf0;
+  --copper:#c8915a; --blue:#5da9e9; --green:#62c48a; --yellow:#e8c93a; --violet:#a98be8;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -38,8 +38,8 @@ nav{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
 .card:focus-visible{outline:3px solid var(--c);outline-offset:3px}
 .card.copper{--c:var(--copper)}
 .card.blue{--c:var(--blue)}
-.card.tierra{--c:var(--green)}
 .card.violet{--c:var(--violet)}
+.card.tierra{--c:var(--green)}
 .band{background:var(--c)}
 .tierra .band{background:repeating-linear-gradient(90deg,var(--green) 0 26px,var(--yellow) 26px 52px)}
 .body{padding:22px 22px 24px;display:flex;flex-direction:column;gap:10px;min-height:230px}
@@ -66,12 +66,12 @@ h2{margin:0;font-size:1.55rem;line-height:1.15;font-weight:750;letter-spacing:-.
   <header>
     <img src="icon-192.png" alt="">
     <div>
-      <h1>Mis proyectos</h1>
-      <p class="sub">Elegí cuál querés abrir.</p>
+      <h1>GSA Tools</h1>
+      <p class="sub">Elegí la herramienta que querés abrir.</p>
     </div>
   </header>
 
-  <nav aria-label="Proyectos">
+  <nav aria-label="Herramientas">
     <a class="card copper" href="presupuestador/">
       <span class="band" aria-hidden="true"></span>
       <span class="body">
@@ -92,22 +92,22 @@ h2{margin:0;font-size:1.55rem;line-height:1.15;font-weight:750;letter-spacing:-.
       </span>
     </a>
 
+    <a class="card violet" href="perfil-elevacion/">
+      <span class="band" aria-hidden="true"></span>
+      <span class="body">
+        <h2>Perfil de elevación</h2>
+        <p class="desc">Mirá el perfil de elevación del terreno entre dos puntos, para evaluar enlaces y recorridos.</p>
+        <p class="note">Útil para planificar antenas y enlaces.</p>
+        <span class="open">Abrir</span>
+      </span>
+    </a>
+
     <a class="card tierra" href="electricidad/">
       <span class="band" aria-hidden="true"></span>
       <span class="body">
         <h2>GSA Solutions</h2>
         <p class="desc">Sitio de la empresa: electricidad, redes e infraestructura para hogares y empresas en Córdoba.</p>
         <p class="note">Página para clientes.</p>
-        <span class="open">Abrir</span>
-      </span>
-    </a>
-
-    <a class="card violet" href="perfil-elevacion/">
-      <span class="band" aria-hidden="true"></span>
-      <span class="body">
-        <h2>Perfil de elevación</h2>
-        <p class="desc">Poné dos puntos y mirá cómo sube y baja el terreno entre ellos. Con la altura de las antenas, ves si hay vista libre.</p>
-        <p class="note">Necesita internet.</p>
         <span class="open">Abrir</span>
       </span>
     </a>
