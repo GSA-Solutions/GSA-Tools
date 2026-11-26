@@ -21,7 +21,8 @@ const CONFIG = {
     "lucasaveit@gmail.com",
     "gsa.solutions.cba@gmail.com",
     "cintia.cerezo.f@gmail.com",
-    "matiasgunc@gmail.com"
+    "matiasgunc@gmail.com",
+    "federicosaldano@gmail.com"
   ],
 
   // Respaldo: clave para entrar como dueño sin Google (en https://TU-SITIO/__login).
