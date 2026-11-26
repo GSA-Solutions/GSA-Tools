@@ -19,6 +19,15 @@ const CONFIG = {
     "electricidad": "zqhentkszads3fmub3ue"
   },
 
+  // Mostrar u ocultar cada proyecto: true = visible, false = oculto para TODOS (incluido vos).
+  // Oculto = desaparece la tarjeta del inicio y su dirección responde "No disponible".
+  activos: {
+    "perfil-elevacion": true,
+    "ses-10": true,
+    "presupuestador": true,
+    "electricidad": true
+  },
+
   // Carpetas abiertas a cualquiera, sin clave. Ej.: ["electricidad"] para publicar la web de la empresa.
   publicos: []
 };
@@ -54,6 +63,10 @@ function loginPage(error) {
     "<input name=\"clave\" type=\"password\" autocomplete=\"current-password\" autofocus aria-label=\"Clave\" style=\"width:100%;box-sizing:border-box;padding:12px;border-radius:8px;border:2px solid #2a343d;background:#11161b;color:#e8edf2;font:inherit;font-size:1.3rem;text-align:center\">" +
     "<button style=\"margin-top:14px;width:100%;padding:12px;border:0;border-radius:8px;background:#c8915a;color:#10151a;font:inherit;font-weight:700;cursor:pointer\">Entrar</button>" +
     "<p style=\"min-height:1.3em;margin:10px 0 0;color:#e87a7a;font-size:.9rem\">" + (error || "") + "</p></form>"), 401);
+}
+function noDisponible() {
+  return respuesta(PAGINA("No disponible",
+    "<div><h1 style=\"font-size:1.5rem;margin:0 0 8px\">No disponible</h1><p style=\"margin:0;color:#93a1ad\">Esta página no está disponible por el momento.</p></div>"), 404);
 }
 function bloqueada() {
   return respuesta(PAGINA("Acceso restringido",
@@ -97,8 +110,17 @@ export async function onRequest(context) {
   const seg = url.pathname.split("/")[1] || "";
   const clave = Object.prototype.hasOwnProperty.call(CONFIG.proyectos, seg) ? CONFIG.proyectos[seg] : null;
 
+  // Estado de los proyectos (lo usa el inicio para mostrar u ocultar las tarjetas). Solo el dueño.
+  if (url.pathname === "/__estado") {
+    if (!esDueno) return bloqueada();
+    const e = {};
+    Object.keys(CONFIG.proyectos).forEach((p) => { e[p] = CONFIG.activos[p] !== false; });
+    return new Response(JSON.stringify(e), { headers: { "Content-Type": "application/json", "Cache-Control": "private, no-store" } });
+  }
+
   // Proyectos
   if (clave !== null) {
+    if (CONFIG.activos[seg] === false) return noDisponible();
     if (CONFIG.publicos.indexOf(seg) !== -1 || esDueno) return servir(next);
     const k = url.searchParams.get("k");
     if (k && igual(k, clave)) {

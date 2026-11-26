@@ -104,7 +104,7 @@ h2{margin:0;font-size:1.55rem;line-height:1.15;font-weight:750;letter-spacing:-.
   </header>
 
   <nav aria-label="Herramientas">
-    <a class="card copper" href="presupuestador/">
+    <a class="card copper" data-p="presupuestador" href="presupuestador/">
       <span class="band" aria-hidden="true"></span>
       <span class="body">
         <h2>Presupuestador eléctrico</h2>
@@ -114,7 +114,7 @@ h2{margin:0;font-size:1.55rem;line-height:1.15;font-weight:750;letter-spacing:-.
       </span>
     </a>
 
-    <a class="card blue" href="ses-10/">
+    <a class="card blue" data-p="ses-10" href="ses-10/">
       <span class="band" aria-hidden="true"></span>
       <span class="body">
         <h2>Apuntamiento SES-10</h2>
@@ -124,7 +124,7 @@ h2{margin:0;font-size:1.55rem;line-height:1.15;font-weight:750;letter-spacing:-.
       </span>
     </a>
 
-    <a class="card violet" href="perfil-elevacion/">
+    <a class="card violet" data-p="perfil-elevacion" href="perfil-elevacion/">
       <span class="band" aria-hidden="true"></span>
       <span class="body">
         <h2>Perfil de elevación</h2>
@@ -134,7 +134,7 @@ h2{margin:0;font-size:1.55rem;line-height:1.15;font-weight:750;letter-spacing:-.
       </span>
     </a>
 
-    <a class="card tierra" id="cardWeb" href="electricidad/" hidden>
+    <a class="card tierra" data-p="electricidad" href="electricidad/">
       <span class="band" aria-hidden="true"></span>
       <span class="body">
         <h2>GSA Solutions</h2>
@@ -167,7 +167,17 @@ h2{margin:0;font-size:1.55rem;line-height:1.15;font-weight:750;letter-spacing:-.
     }
     return Promise.resolve(sha256(v));
   }
-  if(window.GSA_CONFIG&&GSA_CONFIG.mostrarWeb===true){document.getElementById("cardWeb").hidden=false}
+  var cfg=window.GSA_CONFIG||{},cards=[].slice.call(document.querySelectorAll(".card[data-p]"));
+  var servidor=cfg.servidor&&!/github\.io$/.test(location.hostname);
+  if(servidor){
+    // Las tarjetas se muestran según functions/_middleware.js ("activos": true/false)
+    cards.forEach(function(c){c.hidden=true});
+    fetch("/__estado",{cache:"no-store",credentials:"same-origin"}).then(function(r){return r.json()}).then(function(e){
+      cards.forEach(function(c){c.hidden=e[c.getAttribute("data-p")]===false});
+    }).catch(function(){});
+  }else{
+    cards.forEach(function(c){if(c.getAttribute("data-p")==="electricidad")c.hidden=cfg.mostrarWeb!==true});
+  }
   function show(){document.getElementById("gate").hidden=true;document.getElementById("app").hidden=false}
   function ask(){var g=document.getElementById("gate");g.hidden=false;document.getElementById("gpin").focus()}
   var ok=false;try{ok=localStorage.getItem(KEY)===HASH}catch(e){}
