@@ -24,8 +24,8 @@ const CONFIG = {
   activos: {
     "perfil-elevacion": true,
     "ses-10": true,
-    "presupuestador": true,
-    "electricidad": true
+    "presupuestador": false,
+    "electricidad": false
   },
 
   // Carpetas abiertas a cualquiera, sin clave. Ej.: ["electricidad"] para publicar la web de la empresa.
