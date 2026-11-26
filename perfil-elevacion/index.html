@@ -24,6 +24,7 @@ body{
 }
 .wrap{max-width:900px;margin:0 auto}
 .back{display:inline-block;color:var(--dim);text-decoration:none;font-size:.9rem;padding:6px 0;margin-bottom:8px}
+.back[hidden]{display:none}
 .back:hover{color:var(--text)}
 h1{margin:0 0 4px;font-size:clamp(1.7rem,5.5vw,2.4rem);line-height:1.1;font-weight:800;letter-spacing:-.02em}
 .sub{margin:0 0 20px;color:var(--dim)}
@@ -108,7 +109,8 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
 </head>
 <body>
 <main class="wrap">
-  <a class="back" href="../">← Mis proyectos</a>
+  <a class="back" id="backlink" href="../" hidden>← Mis proyectos</a>
+  <script>try{if(localStorage.getItem("gsa_ok")==="c1f330d0aff31c1c87403f1e4347bcc21aff7c179908723535f2b31723702525")document.getElementById("backlink").hidden=false}catch(e){}</script>
   <h1>Perfil de elevación</h1>
   <p class="sub">Elegí dos puntos y mirá cómo sube y baja el terreno entre ellos.</p>
 
