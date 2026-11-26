@@ -144,6 +144,7 @@ h2{margin:0;font-size:1.55rem;line-height:1.15;font-weight:750;letter-spacing:-.
       </span>
     </a>
   </nav>
+  <div id="acceso" style="text-align:center;margin:34px 0 0;color:var(--dim);font-size:.9rem"></div>
 </main>
 </div>
 <script>
@@ -170,10 +171,36 @@ h2{margin:0;font-size:1.55rem;line-height:1.15;font-weight:750;letter-spacing:-.
   var cfg=window.GSA_CONFIG||{},cards=[].slice.call(document.querySelectorAll(".card[data-p]"));
   var servidor=cfg.servidor&&!/github\.io$/.test(location.hostname);
   if(servidor){
-    // Las tarjetas se muestran según functions/_middleware.js ("activos": true/false)
+    // Qué tarjetas ves y el botón de Google los decide functions/_middleware.js
     cards.forEach(function(c){c.hidden=true});
+    var box=document.getElementById("acceso");
+    function link(txt,href){var a=document.createElement("a");a.href=href;a.textContent=txt;a.style.color="var(--dim)";return a}
+    function aviso(t){var m=document.getElementById("gmsg");if(m)m.textContent=t}
+    function acceso(e){
+      box.textContent="";
+      if(e.rol==="dueno"){
+        box.appendChild(document.createTextNode((e.email?e.email+" · ":"Sesión del dueño · ")));
+        box.appendChild(link("Salir","/__salir"));
+        return;
+      }
+      var g=document.createElement("div");g.id="gbtn";g.style.cssText="display:flex;justify-content:center;min-height:44px";box.appendChild(g);
+      var m=document.createElement("p");m.id="gmsg";m.style.cssText="margin:8px 0 0;color:#e87a7a;min-height:1.2em";box.appendChild(m);
+      if(e.pin){var p=document.createElement("p");p.style.margin="4px 0 0";p.appendChild(link("Entrar con clave","/__login"));box.appendChild(p)}
+      var s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.async=true;
+      s.onload=function(){
+        google.accounts.id.initialize({client_id:e.clientId,callback:function(r){
+          fetch("/__google",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify({credential:r.credential})})
+            .then(function(x){if(x.ok)location.reload();else aviso("Esa cuenta no tiene permiso.")})
+            .catch(function(){aviso("No se pudo ingresar. Probá de nuevo.")});
+        }});
+        google.accounts.id.renderButton(g,{theme:"filled_black",size:"large",text:"signin_with",locale:"es"});
+      };
+      s.onerror=function(){aviso("No se pudo cargar el ingreso con Google.")};
+      document.head.appendChild(s);
+    }
     fetch("/__estado",{cache:"no-store",credentials:"same-origin"}).then(function(r){return r.json()}).then(function(e){
-      cards.forEach(function(c){c.hidden=e[c.getAttribute("data-p")]===false});
+      cards.forEach(function(c){c.hidden=e.proyectos[c.getAttribute("data-p")]!==true});
+      acceso(e);
     }).catch(function(){});
   }else{
     cards.forEach(function(c){if(c.getAttribute("data-p")==="electricidad")c.hidden=cfg.mostrarWeb!==true});
