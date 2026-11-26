@@ -8,6 +8,11 @@
 <meta name="theme-color" content="#11161b">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="GSA Tools">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
 :root{
   --bg:#11161b; --panel:#181f26; --line:#2a343d; --text:#e8edf2; --dim:#93a1ad;
@@ -143,7 +148,7 @@ h2{margin:0;font-size:1.55rem;line-height:1.15;font-weight:750;letter-spacing:-.
 </div>
 <script>
 (function(){
-  var HASH="c1f330d0aff31c1c87403f1e4347bcc21aff7c179908723535f2b31723702525",KEY="gsa_ok";
+  var HASH=(window.GSA_CONFIG&&GSA_CONFIG.claveHash)||"",KEY="gsa_ok";
   function sha256(m){function r(n,x){return x>>>n|x<<32-n}var K=[],H=[],i,j,p=0,c={};
     for(var n=2;p<64;n++){if(!c[n]){for(i=0;i<313;i+=n)c[i]=n;H[p]=Math.pow(n,.5)*4294967296|0;K[p++]=Math.pow(n,1/3)*4294967296|0}}
     var b=unescape(encodeURIComponent(m)),l=b.length,w=[];b+="\x80";while(b.length%64-56)b+="\0";
@@ -166,7 +171,7 @@ h2{margin:0;font-size:1.55rem;line-height:1.15;font-weight:750;letter-spacing:-.
   function show(){document.getElementById("gate").hidden=true;document.getElementById("app").hidden=false}
   function ask(){var g=document.getElementById("gate");g.hidden=false;document.getElementById("gpin").focus()}
   var ok=false;try{ok=localStorage.getItem(KEY)===HASH}catch(e){}
-  if(ok){show()}else{ask()}
+  if(ok||(window.GSA_CONFIG&&GSA_CONFIG.servidor&&!/github\.io$/.test(location.hostname))){show()}else{ask()}
   document.getElementById("gform").addEventListener("submit",function(ev){
     ev.preventDefault();
     var inp=document.getElementById("gpin"),err=document.getElementById("gerr");
@@ -175,6 +180,9 @@ h2{margin:0;font-size:1.55rem;line-height:1.15;font-weight:750;letter-spacing:-.
       else{err.textContent="Clave incorrecta.";inp.value="";var f=document.getElementById("gform");f.classList.remove("shake");void f.offsetWidth;f.classList.add("shake");inp.focus()}
     });
   });
+  if('serviceWorker' in navigator&&location.protocol==='https:'){
+    window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
+  }
 })();
 </script>
 </body>

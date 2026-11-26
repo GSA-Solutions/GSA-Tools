@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<style id="gsa-hide">html{visibility:hidden}</style>
+<script src="../config.js"></script>
+<script src="../gate.js" data-p="perfil-elevacion"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Perfil de elevación</title>
@@ -110,7 +113,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
 <body>
 <main class="wrap">
   <a class="back" id="backlink" href="../" hidden>← Mis proyectos</a>
-  <script>try{if(localStorage.getItem("gsa_ok")==="c1f330d0aff31c1c87403f1e4347bcc21aff7c179908723535f2b31723702525")document.getElementById("backlink").hidden=false}catch(e){}</script>
+  <script>if(window.GSA_OWNER)document.getElementById("backlink").hidden=false</script>
   <h1>Perfil de elevación</h1>
   <p class="sub">Elegí dos puntos y mirá cómo sube y baja el terreno entre ellos.</p>
 
