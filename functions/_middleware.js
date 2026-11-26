@@ -42,7 +42,7 @@ const CONFIG = {
 
   // Qué ve CUALQUIER persona que entra sin iniciar sesión (true = lo ve, false = solo vos).
   publicos: {
-    "perfil-elevacion": false,
+    "perfil-elevacion": true,
     "ses-10": true,
     "presupuestador": false,
     "electricidad": false
